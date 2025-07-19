@@ -26,8 +26,8 @@ menu = st.sidebar.selectbox("Pilih Menu", [
     "Sub Menu Negara", 
     "Sub Menu Total Film", 
     "Sub Menu Chart (Rating vs Jumlah Film)"
-    "Sub Menu Resume Gross dan Duration"
-    "Sub Menu Query (Language dan Genre)"
+    "7. Sub Menu Resume Gross dan Duration"
+    "8. Sub Menu Query (Language dan Genre)"
 ])
 
 
@@ -189,8 +189,8 @@ elif "Sub Menu Chart" in menu:
         st.error("Kolom rating tidak ditemukan.")
 
 # SUB MENU RESUME GROSS DAN DURATION
-elif "Sub Menu Resume Gross dan Duration" in menu:
-    st.subheader("Resume Gross dan Duration")
+if pilihan_menu.startswith("7"):
+    st.subheader("Sub Menu Resume Gross dan Duration")
 
     st.markdown("### Gross Revenue Resume:")
     total_gross = df["Gross Revenue"].sum()
@@ -215,64 +215,60 @@ elif "Sub Menu Resume Gross dan Duration" in menu:
     st.text(f"Tertinggi : {max_durasi} Menit")
 
 # SUB MENU QUERY (LANGUAGE AND GENRE)
-elif "Sub Menu Query (Language dan Genre)" in menu:
+elif pilihan_menu.startswith("8"):
 st.subheader("Sub Menu Query (Language dan Genre)")
-while True:
-        bahasa = st.text_input(">> Input Bahasa yang dicari: (Spasi untuk Kembali ke Menu)").strip()
-        if bahasa == "":
-            break
 
-        genre = st.text_input(">> Genre ?").strip()
-        if genre == "":
-            break
+    bahasa = st.text_input(">> Input Bahasa yang dicari (Spasi untuk kembali):", key="bahasa").strip()
 
-        # Filter data
-        filtered_df = df[(df['Language'].str.contains(bahasa, case=False, na=False)) &
-                         (df['Genre'].str.contains(genre, case=False, na=False))]
+    if bahasa != "":
+        genre = st.text_input(">> Genre:", key="genre").strip()
 
-        if filtered_df.empty:
-            st.warning("Tidak ditemukan film dengan Bahasa dan Genre tersebut.")
-            continue
+        if genre != "":
+            filtered_df = df[
+                df['Language'].str.contains(bahasa, case=False, na=False) &
+                df['Genre'].str.contains(genre, case=False, na=False)
+            ]
 
-        # Tampilkan 5 film pertama
-        st.write("**List 5 Film Teratas**")
-        st.dataframe(filtered_df.head(5))
+            if filtered_df.empty:
+                st.warning("Tidak ditemukan film dengan Bahasa dan Genre tersebut.")
+            else:
+                st.write("**List 5 Film Teratas**")
+                st.dataframe(filtered_df.head(5))
 
-        st.write(f"Total Film Genre **{genre}** dan Bahasa **{bahasa}** adalah: {len(filtered_df)} Film")
+                st.write(f"Total Film Genre **{genre}** dan Bahasa **{bahasa}** adalah: {len(filtered_df)} Film")
 
-        # ==== Durasi ====
-        st.markdown("**Durasi Film**")
-        durasi_total = filtered_df['Duration'].sum()
-        durasi_mean = filtered_df['Duration'].mean()
-        durasi_min = filtered_df['Duration'].min()
-        durasi_max = filtered_df['Duration'].max()
+                # ==== Durasi ====
+                st.markdown("### Durasi Film")
+                durasi_total = filtered_df['Duration'].sum()
+                durasi_mean = filtered_df['Duration'].mean()
+                durasi_min = filtered_df['Duration'].min()
+                durasi_max = filtered_df['Duration'].max()
 
-        aktor_durasi_min = filtered_df[filtered_df['Duration'] == durasi_min]['Lead Actor'].values[0]
-        aktor_durasi_max = filtered_df[filtered_df['Duration'] == durasi_max]['Lead Actor'].values[0]
+                aktor_durasi_min = filtered_df[filtered_df['Duration'] == durasi_min]['Lead Actor'].values[0]
+                aktor_durasi_max = filtered_df[filtered_df['Duration'] == durasi_max]['Lead Actor'].values[0]
 
-        st.text(f"Total Durasi        : {durasi_total:.1f} Menit")
-        st.text(f"Rata-rata Durasi    : {durasi_mean:.9f} Menit")
-        st.text(f"Durasi Terendah     : {durasi_min} Menit, Lead Actor: ['{aktor_durasi_min}']")
-        st.text(f"Durasi Tertinggi    : {durasi_max} Menit, Lead Actor: ['{aktor_durasi_max}']")
+                st.text(f"Total Durasi        : {durasi_total:.1f} Menit")
+                st.text(f"Rata-rata Durasi    : {durasi_mean:.9f} Menit")
+                st.text(f"Durasi Terendah     : {durasi_min} Menit, Lead Actor: ['{aktor_durasi_min}']")
+                st.text(f"Durasi Tertinggi    : {durasi_max} Menit, Lead Actor: ['{aktor_durasi_max}']")
 
-        # ==== Gross Revenue ====
-        st.markdown("**Gross Revenue**")
-        gross_total = filtered_df['Gross Revenue'].sum()
-        gross_mean = filtered_df['Gross Revenue'].mean()
-        gross_min = filtered_df['Gross Revenue'].min()
-        gross_max = filtered_df['Gross Revenue'].max()
+                # ==== Gross Revenue ====
+                st.markdown("### Gross Revenue")
+                gross_total = filtered_df['Gross Revenue'].sum()
+                gross_mean = filtered_df['Gross Revenue'].mean()
+                gross_min = filtered_df['Gross Revenue'].min()
+                gross_max = filtered_df['Gross Revenue'].max()
 
-        aktor_gross_min = filtered_df[filtered_df['Gross Revenue'] == gross_min]['Lead Actor'].values[0]
-        title_gross_min = filtered_df[filtered_df['Gross Revenue'] == gross_min]['Title'].values[0]
+                aktor_gross_min = filtered_df[filtered_df['Gross Revenue'] == gross_min]['Lead Actor'].values[0]
+                title_gross_min = filtered_df[filtered_df['Gross Revenue'] == gross_min]['Title'].values[0]
 
-        aktor_gross_max = filtered_df[filtered_df['Gross Revenue'] == gross_max]['Lead Actor'].values[0]
-        title_gross_max = filtered_df[filtered_df['Gross Revenue'] == gross_max]['Title'].values[0]
+                aktor_gross_max = filtered_df[filtered_df['Gross Revenue'] == gross_max]['Lead Actor'].values[0]
+                title_gross_max = filtered_df[filtered_df['Gross Revenue'] == gross_max]['Title'].values[0]
 
-        st.text(f"Total Gross Revenue     : ${gross_total}")
-        st.text(f"Rata-rata Gross Revenue : ${gross_mean}")
-        st.text(f"Gross Revenue Terendah  : ${gross_min}, Lead Actor: ['{aktor_gross_min}'], Title: ['{title_gross_min}']")
-        st.text(f"Gross Revenue Tertinggi : ${gross_max}, Lead Actor: ['{aktor_gross_max}'], Title: ['{title_gross_max}']")
-
-
+                st.text(f"Total Gross Revenue     : ${gross_total}")
+                st.text(f"Rata-rata Gross Revenue : ${gross_mean}")
+                st.text(f"Gross Revenue Terendah  : ${gross_min}, Lead Actor: ['{aktor_gross_min}'], Title: ['{title_gross_min}']")
+                st.text(f"Gross Revenue Tertinggi : ${gross_max}, Lead Actor: ['{aktor_gross_max}'], Title: ['{title_gross_max}']")
+                
 elif "Exit" in menu:
     st.info("Silakan tutup aplikasi jika ingin keluar.")
