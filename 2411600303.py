@@ -25,9 +25,9 @@ menu = st.sidebar.selectbox("Pilih Menu", [
     "Sub Menu Bahasa", 
     "Sub Menu Negara", 
     "Sub Menu Total Film", 
-    "Sub Menu Chart (Rating vs Jumlah Film)"
-    "Sub Menu Resume Gross dan Duration"
-    "Sub Menu Query (Language dan Genre)"
+    "Sub Menu Chart (Rating vs Jumlah Film)",
+    "Sub Menu Resume Gross dan Duration",
+    "Sub Menu Query (Language dan Genre)",
 ])
 
 
