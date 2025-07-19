@@ -12,7 +12,6 @@ df = load_data()
 st.markdown("```")
 st.text("Hello,")
 st.text("Selamat Datang di Dashboard IMDb Milik SULASTRI")
-st.text("by.")
 st.text("> NIM  : 2411600303")
 st.text("> Nama : SULASTRI")
 
@@ -26,7 +25,8 @@ menu = st.sidebar.selectbox("Pilih Menu", [
     "Sub Menu Bahasa", 
     "Sub Menu Negara", 
     "Sub Menu Total Film", 
-    "Sub Menu Chart"
+    "Sub Menu Chart (Rating vs Jumlah Film)"
+    "Sub Menu Resume Gross dan Duration"
 ])
 
 
@@ -68,7 +68,7 @@ elif "Query" in menu:
     st.write(f"Ditemukan {len(hasil)} film:")
     st.dataframe(hasil)
 
-# ✅ SUB MENU GENRE
+#  SUB MENU GENRE
 elif "Sub Menu Genre" in menu:
     st.subheader("Jumlah dan Detail per Genre")
     genre_counts = df['Genre'].value_counts().rename_axis("Genre").reset_index(name="Jumlah")
@@ -79,7 +79,7 @@ elif "Sub Menu Genre" in menu:
     st.write(f"Detail Film dengan Genre: {selected_genre}")
     st.dataframe(detail_genre)
 
-# ✅ SUB MENU COLOR - Versi Fix
+#  SUB MENU COLOR
 elif "Sub Menu Color" in menu:
     st.subheader("Jumlah dan Detail per Warna (Color/BW)")
 
@@ -105,7 +105,7 @@ elif "Sub Menu Color" in menu:
         st.error("Kolom Color/BW tidak ditemukan di dataset.")
 
 
-# ✅ SUB MENU GENRE
+#  SUB MENU GENRE
 elif "Sub Menu Genre" in menu:
     st.subheader("Jumlah dan Detail per Genre")
 
@@ -120,7 +120,7 @@ elif "Sub Menu Genre" in menu:
     st.write(f"Detail Film dengan Genre: {selected_genre}")
     st.dataframe(detail_genre)
 
-# ✅ SUB MENU COLOR
+#  SUB MENU COLOR
 elif "Sub Menu Color" in menu:
     st.subheader("Jumlah dan Detail per Warna (Color/BW)")
 
@@ -135,7 +135,7 @@ elif "Sub Menu Color" in menu:
     st.write(f"Detail Film dengan Warna: {selected_color}")
     st.dataframe(detail_color)
 
-# ✅ SUB MENU BAHASA
+#  SUB MENU BAHASA
 elif "Sub Menu Bahasa" in menu:
     st.subheader("Jumlah Bahasa di Dataset")
     
@@ -150,7 +150,7 @@ elif "Sub Menu Bahasa" in menu:
     else:
         st.error("Kolom bahasa tidak ditemukan.")
 
-# ✅ SUB MENU NEGARA
+# SUB MENU NEGARA
 elif "Sub Menu Negara" in menu:
     st.subheader("Jumlah Negara di Dataset")
 
@@ -164,7 +164,7 @@ elif "Sub Menu Negara" in menu:
     else:
         st.error("Kolom negara tidak ditemukan.")
 
-# ✅ SUB MENU TOTAL FILM
+#  SUB MENU TOTAL FILM
 elif "Sub Menu Total Film" in menu:
     st.subheader("Jumlah Total Film di Dataset")
     
@@ -172,7 +172,7 @@ elif "Sub Menu Total Film" in menu:
     st.write(f"Dataset IMDB saat ini memiliki **{num_films} Film**.")
 
 
-# ✅ SUB MENU CHART
+#  SUB MENU CHART
 elif "Sub Menu Chart" in menu:
     st.subheader("Grafik Jumlah Film per Rating")
 
@@ -187,6 +187,23 @@ elif "Sub Menu Chart" in menu:
     else:
         st.error("Kolom rating tidak ditemukan.")
 
+# SUB MENU RESUME GROSS DAN DURATION
+elif pilihan.startswith("7"):
+    st.subheader("Resume Gross dan Duration")
+
+    st.text("Gross Revenue Resume:")
+    st.text("=========================")
+    st.text(f"Total       : $ {df['Gross'].sum():,.0f}")
+    st.text(f"Rata-rata   : $ {df['Gross'].mean():,.6f}")
+    st.text(f"Terendah    : $ {df['Gross'].min():,.0f}")
+    st.text(f"Tertinggi   : $ {df['Gross'].max():,.0f}")
+
+    st.text("\nDuration Resume:")
+    st.text("=========================")
+    st.text(f"Total       : {df['Duration'].sum():,.1f} Menit")
+    st.text(f"Rata-rata   : {df['Duration'].mean():,.6f} Menit")
+    st.text(f"Terendah    : {df['Duration'].min():,.1f} Menit")
+    st.text(f"Tertinggi   : {df['Duration'].max():,.1f} Menit")
 
 elif "Exit" in menu:
     st.info("Silakan tutup aplikasi jika ingin keluar.")
