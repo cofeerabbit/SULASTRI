@@ -26,8 +26,8 @@ menu = st.sidebar.selectbox("Pilih Menu", [
     "Sub Menu Negara", 
     "Sub Menu Total Film", 
     "Sub Menu Chart (Rating vs Jumlah Film)"
-    "7. Sub Menu Resume Gross dan Duration"
-    "8. Sub Menu Query (Language dan Genre)"
+    "Sub Menu Resume Gross dan Duration"
+    "Sub Menu Query (Language dan Genre)"
 ])
 
 
@@ -189,7 +189,7 @@ elif "Sub Menu Chart" in menu:
         st.error("Kolom rating tidak ditemukan.")
 
 # SUB MENU RESUME GROSS DAN DURATION
-if pilihan_menu.startswith("7"):
+elif "Sub Menu Resume Gross dan Duration" in menu:
     st.subheader("Sub Menu Resume Gross dan Duration")
 
     st.markdown("### Gross Revenue Resume:")
@@ -215,7 +215,7 @@ if pilihan_menu.startswith("7"):
     st.text(f"Tertinggi : {max_durasi} Menit")
 
 # SUB MENU QUERY (LANGUAGE AND GENRE)
-elif pilihan_menu.startswith("8"):
+elif "Sub Menu Query (Language dan Genre)" in menu:
 st.subheader("Sub Menu Query (Language dan Genre)")
 
     bahasa = st.text_input(">> Input Bahasa yang dicari (Spasi untuk kembali):", key="bahasa").strip()
