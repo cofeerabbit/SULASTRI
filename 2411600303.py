@@ -31,18 +31,16 @@ st.text("10. Exit")
 st.markdown("```")
 
 # Pilihan Menu
-menu = st.selectbox("Pilih Menu:", (
-    "1. Genre", 
-    "2. Bahasa", 
-    "3. Negara", 
-    "4. Total Film", 
-    "5. Chart Rating", 
-    "6. Revenue Gross dan Duration", 
-    "7. Query (Language dan Genre)",
-    "8. Sub Menu Genre",
-    "9. Sub Menu Color",
-    "10. Exit"
-))
+menu = st.sidebar.selectbox("Pilih Menu", [
+    "Home", 
+    "Sub Menu Genre", 
+    "Sub Menu Color", 
+    "Sub Menu Bahasa", 
+    "Sub Menu Negara", 
+    "Sub Menu Total Film", 
+    "Sub Menu Chart"
+])
+
 
 # Menu Sebelumnya Tetap
 if "Genre" in menu and not "Sub" in menu:
@@ -148,6 +146,58 @@ elif "Sub Menu Color" in menu:
     detail_color = df[df["Color/BW"] == selected_color]
     st.write(f"Detail Film dengan Warna: {selected_color}")
     st.dataframe(detail_color)
+
+# ✅ SUB MENU BAHASA
+elif "Sub Menu Bahasa" in menu:
+    st.subheader("Jumlah Bahasa di Dataset")
+    
+    # Otomatis cari kolom yang mengandung kata "language"
+    language_cols = [col for col in df.columns if 'language' in col.lower()]
+    
+    if language_cols:
+        lang_col = language_cols[0]
+        num_langs = df[lang_col].nunique()
+        st.write(f"Dataset IMDB saat ini terdiri dari **{num_langs} Bahasa**.")
+        st.dataframe(df[[lang_col]].drop_duplicates().reset_index(drop=True))
+    else:
+        st.error("Kolom bahasa tidak ditemukan.")
+
+# ✅ SUB MENU NEGARA
+elif "Sub Menu Negara" in menu:
+    st.subheader("Jumlah Negara di Dataset")
+
+    country_cols = [col for col in df.columns if 'country' in col.lower()]
+    
+    if country_cols:
+        country_col = country_cols[0]
+        num_countries = df[country_col].nunique()
+        st.write(f"Terdapat **{num_countries} Negara** dalam Dataset IMDB.")
+        st.dataframe(df[[country_col]].drop_duplicates().reset_index(drop=True))
+    else:
+        st.error("Kolom negara tidak ditemukan.")
+
+# ✅ SUB MENU TOTAL FILM
+elif "Sub Menu Total Film" in menu:
+    st.subheader("Jumlah Total Film di Dataset")
+    
+    num_films = df.shape[0]
+    st.write(f"Dataset IMDB saat ini memiliki **{num_films} Film**.")
+
+
+# ✅ SUB MENU CHART
+elif "Sub Menu Chart" in menu:
+    st.subheader("Grafik Jumlah Film per Rating")
+
+    rating_cols = [col for col in df.columns if 'rating' in col.lower()]
+    
+    if rating_cols:
+        rating_col = rating_cols[0]
+        rating_counts = df[rating_col].value_counts().reset_index()
+        rating_counts.columns = ['Rating', 'Jumlah Film']
+        
+        st.bar_chart(rating_counts.set_index('Rating'))
+    else:
+        st.error("Kolom rating tidak ditemukan.")
 
 
 elif "Exit" in menu:
