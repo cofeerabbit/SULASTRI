@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Load Data
 @st.cache_data
@@ -43,45 +44,48 @@ menu = st.selectbox("Input Pilihan Menu:", (
 # Menu 1 - Genre
 if "Genre" in menu:
     st.subheader("Jumlah Film per Genre")
-    genre_count = df['Genre'].value_counts().rename_axis('Genre').reset_index(name='Jumlah')
-    st.bar_chart(data=genre_count.set_index('Genre'))
+    st.bar_chart(df['Genre'].value_counts())
 
 # Menu 2 - Bahasa
 elif "Bahasa" in menu:
     st.subheader("Jumlah Film per Bahasa")
-    lang_count = df['Language'].value_counts().rename_axis('Bahasa').reset_index(name='Jumlah')
-    st.bar_chart(data=lang_count.set_index('Bahasa'))
+    st.bar_chart(df['Language'].value_counts())
 
 # Menu 3 - Negara
 elif "Negara" in menu:
     st.subheader("Jumlah Film per Negara")
-    country_count = df['Country'].value_counts().rename_axis('Negara').reset_index(name='Jumlah')
-    st.bar_chart(data=country_count.set_index('Negara'))
+    st.bar_chart(df['Country'].value_counts())
 
 # Menu 4 - Total Film
 elif "Total Film" in menu:
     st.subheader("Total Film dalam Dataset")
-    st.success(f"Ada total {len(df)} film dalam dataset.")
+    st.success(f"Ada total {len(df)} film.")
 
-# Menu 5 - Chart Rating (pakai line chart)
+# Menu 5 - Chart Rating
 elif "Chart Rating" in menu:
     st.subheader("Distribusi IMDb Score")
-    rating_data = df["IMDb Score (1-10)"].value_counts().sort_index()
-    st.line_chart(rating_data)
+    fig, ax = plt.subplots()
+    ax.hist(df["IMDb Score (1-10)"], bins=10, color='skyblue', edgecolor='black')
+    ax.set_xlabel("IMDb Score")
+    ax.set_ylabel("Jumlah Film")
+    st.pyplot(fig)
 
-# Menu 6 - Revenue Gross dan Duration
+# Menu 6 - Revenue dan Duration
 elif "Revenue" in menu:
-    st.subheader("Scatter Chart: Gross Revenue vs Duration")
-    scatter_df = df[["Duration (min)", "Gross Revenue"]].dropna()
-    st.scatter_chart(scatter_df)
+    st.subheader("Scatter Plot: Gross Revenue vs Duration")
+    fig, ax = plt.subplots()
+    ax.scatter(df["Duration (min)"], df["Gross Revenue"], color="orange")
+    ax.set_xlabel("Durasi (menit)")
+    ax.set_ylabel("Pendapatan Kotor (Gross)")
+    st.pyplot(fig)
 
-# Menu 7 - Query Berdasarkan Genre dan Language
+# Menu 7 - Query
 elif "Query" in menu:
     st.subheader("Filter Berdasarkan Genre dan Bahasa")
-    selected_genre = st.selectbox("Pilih Genre", df['Genre'].unique())
-    selected_lang = st.selectbox("Pilih Bahasa", df['Language'].unique())
-    hasil = df[(df['Genre'] == selected_genre) & (df['Language'] == selected_lang)]
-    st.write(f"Ditemukan {len(hasil)} film:")
+    genre = st.selectbox("Pilih Genre", df['Genre'].unique())
+    language = st.selectbox("Pilih Bahasa", df['Language'].unique())
+    hasil = df[(df['Genre'] == genre) & (df['Language'] == language)]
+    st.write(f"Ditemukan {len(hasil)} film")
     st.dataframe(hasil)
 
 # Menu 8 - Exit
