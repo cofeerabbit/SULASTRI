@@ -214,5 +214,63 @@ elif "Sub Menu Resume Gross dan Duration" in menu:
     st.text(f"Terendah  : {min_durasi} Menit")
     st.text(f"Tertinggi : {max_durasi} Menit")
 
+# SUB MENU QUERY (Language dan Genre)
+elif "Sub Menu Query" in menu:
+    st.subheader("Sub Menu Query (Language dan Genre)")
+
+    # Input bahasa dan genre
+    selected_lang = st.text_input("Masukkan Bahasa (Spasi untuk Kembali):")
+    if selected_lang.strip() != "":
+        selected_genre = st.text_input("Masukkan Genre (Spasi untuk Kembali):")
+        if selected_genre.strip() != "":
+            # Filter data
+            filtered_df = df[(df["Language"] == selected_lang) & (df["Genre"] == selected_genre)]
+
+            if not filtered_df.empty:
+                st.write(f"List 5 Film dengan Genre **{selected_genre}** dan Bahasa **{selected_lang}**")
+                st.dataframe(filtered_df[["Title", "Release Date", "Gross Revenue", "Budget"]].head(5))
+
+                # Total Film
+                total_film = len(filtered_df)
+                st.success(f"Total Film Genre {selected_genre} dan {selected_lang} adalah: {total_film} Film")
+
+                # Resume Durasi
+                total_duration = filtered_df["Duration"].sum()
+                avg_duration = filtered_df["Duration"].mean()
+                min_duration = filtered_df["Duration"].min()
+                max_duration = filtered_df["Duration"].max()
+
+                min_durasi_film = filtered_df.loc[filtered_df["Duration"].idxmin(), ["Title", "Lead Actor"]]
+                max_durasi_film = filtered_df.loc[filtered_df["Duration"].idxmax(), ["Title", "Lead Actor"]]
+
+                st.markdown("### Durasi Film")
+                st.text(f"Total Durasi  : {total_duration} Menit")
+                st.text(f"Rata-rata     : {avg_duration} Menit")
+                st.text(f"Durasi Terendah: {min_duration} Menit, "
+                        f"Lead Actor: {min_durasi_film['Lead Actor']}, Title: [{min_durasi_film['Title']}]")
+                st.text(f"Durasi Tertinggi: {max_duration} Menit, "
+                        f"Lead Actor: {max_durasi_film['Lead Actor']}, Title: [{max_durasi_film['Title']}]")
+
+                # Resume Gross Revenue
+                total_gross = filtered_df["Gross Revenue"].sum()
+                avg_gross = filtered_df["Gross Revenue"].mean()
+                min_gross = filtered_df["Gross Revenue"].min()
+                max_gross = filtered_df["Gross Revenue"].max()
+
+                min_gross_film = filtered_df.loc[filtered_df["Gross Revenue"].idxmin(), ["Title", "Lead Actor"]]
+                max_gross_film = filtered_df.loc[filtered_df["Gross Revenue"].idxmax(), ["Title", "Lead Actor"]]
+
+                st.markdown("### Gross Revenue")
+                st.text(f"Total Gross Revenue : ${total_gross}")
+                st.text(f"Rata-rata Gross     : ${avg_gross}")
+                st.text(f"Gross Terendah      : ${min_gross}, "
+                        f"Lead Actor: {min_gross_film['Lead Actor']}, Title: [{min_gross_film['Title']}]")
+                st.text(f"Gross Tertinggi     : ${max_gross}, "
+                        f"Lead Actor: {max_gross_film['Lead Actor']}, Title: [{max_gross_film['Title']}]")
+
+            else:
+                st.warning("Data tidak ditemukan untuk bahasa dan genre yang dipilih.")
+
+
 elif "Exit" in menu:
     st.info("Silakan tutup aplikasi jika ingin keluar.")
