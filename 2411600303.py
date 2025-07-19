@@ -93,16 +93,31 @@ elif "Sub Menu Genre" in menu:
     st.write(f"Detail Film dengan Genre: {selected_genre}")
     st.dataframe(detail_genre)
 
-# ✅ SUB MENU COLOR
+# ✅ SUB MENU COLOR - Versi Fix
 elif "Sub Menu Color" in menu:
     st.subheader("Jumlah dan Detail per Warna (Color/BW)")
-    color_counts = df['Color/BW'].value_counts().rename_axis("Color").reset_index(name="Jumlah")
-    st.dataframe(color_counts)
 
-    selected_color = st.selectbox("Pilih Warna untuk Lihat Detail", color_counts['Color'])
-    detail_color = df[df["Color/BW"] == selected_color]
-    st.write(f"Detail Film dengan Warna: {selected_color}")
-    st.dataframe(detail_color)
+    # Cek kolom yang mirip "Color/BW"
+    st.write("Kolom tersedia di dataset:")
+    st.write(df.columns.tolist())  # DEBUG: tampilkan semua nama kolom
+
+    # Coba deteksi kolom yang mengandung kata 'color'
+    color_col = [col for col in df.columns if 'color' in col.lower() or 'bw' in col.lower()]
+    
+    if color_col:
+        color_column_name = color_col[0]  # Ambil nama kolom yang cocok
+        color_counts = df[color_column_name].value_counts().rename_axis("Color").reset_index(name="Jumlah")
+        st.write("Tabel Jumlah Film per Color:")
+        st.dataframe(color_counts)
+
+        # Dropdown untuk detail
+        selected_color = st.selectbox("Pilih Warna untuk Lihat Detail", color_counts['Color'])
+        detail_color = df[df[color_column_name] == selected_color]
+        st.write(f"Detail Film dengan Warna: {selected_color}")
+        st.dataframe(detail_color)
+    else:
+        st.error("Kolom Color/BW tidak ditemukan di dataset.")
+
 
 # ✅ SUB MENU GENRE
 elif "Sub Menu Genre" in menu:
