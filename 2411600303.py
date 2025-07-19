@@ -18,16 +18,16 @@ st.text("> Nama : SULASTRI")
 st.text("-----------------------------")
 st.text("        M  E  N  U           ")
 st.text("-----------------------------")
-st.text("[1] Genre")
-st.text("[2] Bahasa")
-st.text("[3] Negara")
-st.text("[4] Total Film")
-st.text("[5] Chart Rating")
-st.text("[6] Revenue Gross dan Duration")
-st.text("[7] Query (Language dan Genre)")
-st.text("[8] Sub Menu Genre")
-st.text("[9] Sub Menu Color")
-st.text("[10] Exit")
+st.text("1. Genre")
+st.text("2. Bahasa")
+st.text("3. Negara")
+st.text("4. Total Film")
+st.text("5. Chart Rating")
+st.text("6. Revenue Gross dan Duration")
+st.text("7. Query (Language dan Genre)")
+st.text("8. Sub Menu Genre")
+st.text("9. Sub Menu Color")
+st.text("10. Exit")
 st.markdown("```")
 
 # Pilihan Menu
@@ -103,6 +103,37 @@ elif "Sub Menu Color" in menu:
     detail_color = df[df["Color/BW"] == selected_color]
     st.write(f"Detail Film dengan Warna: {selected_color}")
     st.dataframe(detail_color)
+
+# ✅ SUB MENU GENRE
+elif "Sub Menu Genre" in menu:
+    st.subheader("Jumlah dan Detail per Genre")
+
+    # Hitung jumlah genre
+    genre_counts = df['Genre'].value_counts().rename_axis("Genre").reset_index(name="Jumlah")
+    st.write("Tabel Jumlah Film per Genre:")
+    st.dataframe(genre_counts)
+
+    # Dropdown untuk detail
+    selected_genre = st.selectbox("Pilih Genre untuk Lihat Detail", genre_counts['Genre'])
+    detail_genre = df[df["Genre"] == selected_genre]
+    st.write(f"Detail Film dengan Genre: {selected_genre}")
+    st.dataframe(detail_genre)
+
+# ✅ SUB MENU COLOR
+elif "Sub Menu Color" in menu:
+    st.subheader("Jumlah dan Detail per Warna (Color/BW)")
+
+    # Hitung jumlah berdasarkan Color
+    color_counts = df['Color/BW'].value_counts().rename_axis("Color").reset_index(name="Jumlah")
+    st.write("Tabel Jumlah Film per Color:")
+    st.dataframe(color_counts)
+
+    # Dropdown untuk detail
+    selected_color = st.selectbox("Pilih Warna untuk Lihat Detail", color_counts['Color'])
+    detail_color = df[df["Color/BW"] == selected_color]
+    st.write(f"Detail Film dengan Warna: {selected_color}")
+    st.dataframe(detail_color)
+
 
 elif "Exit" in menu:
     st.info("Silakan tutup aplikasi jika ingin keluar.")
