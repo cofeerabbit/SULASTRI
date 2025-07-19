@@ -215,7 +215,7 @@ elif "Sub Menu Resume Gross dan Duration" in menu:
     st.text(f"Tertinggi : {max_durasi} Menit")
 
 # SUB MENU QUERY (Language dan Genre)
-elif "Sub Menu Query" in menu:
+elif "Sub Menu Query (Language dan Genre)" in menu:
     st.subheader("Sub Menu Query (Language dan Genre)")
 
     # Input bahasa dan genre
