@@ -188,7 +188,7 @@ elif "Sub Menu Chart" in menu:
         st.error("Kolom rating tidak ditemukan.")
 
 # SUB MENU RESUME GROSS DAN DURATION
-elif pilihan.startswith("7"):
+elif pilihan.startswith("Sub Menu Resume Gross dan Duration"):
     st.subheader("Resume Gross dan Duration")
 
     st.text("Gross Revenue Resume:")
